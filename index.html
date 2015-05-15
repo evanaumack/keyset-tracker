@@ -2,6 +2,7 @@
     <head>
         <title>Keyset Tracker</title>
         <meta charset='utf-8'>
+        <script type="text/javascript" src="js/ICanHaz.js"></script>
         <script type="text/javascript" src='js/jquery.js '></script>
         <script type="text/javascript" src='js/tabletop1.3.4.js'></script>
         <script type="text/javascript" src='js/sheetsee.js'></script>
@@ -17,6 +18,10 @@
         <link rel="stylesheet" href="css/MarkerCluster.css" />
         <link rel="stylesheet" href="css/MarkerCluster.Default.css" />
     </head>
+    <style>
+        .photo {display: inline-block; float: left; width: 100px;}
+    #photogrid {overflow: auto;}
+    </style>
 <body>
     <div id="wrapper">
         <h1>Keyset Tracker</h1>
@@ -30,18 +35,22 @@
             </ul>
         </div>
         <div class="container">
-            <div id="rightSide">
+           
                 <div id="latestSpot"></div>
                 <div id="selectedSpot"></div>
-            </div>
+          
+         
             <div id="map"></div>
+
         </div>
+        
         <div class="container">
             <input id="tableFilter" type="text" placeholder="filter by.."></input>
-            <span class="clear button">Clear</span> <span class="resetMap button">Reset Map</span>
+            <span class="clear button">Clear</span> 
             <span class="noMatches">no matches</span>
             <div id="hackSpotsTable"></div>
         </div>
+        
         <div id="info" class="container">
             <h3>Contribute!</h3>
             <div id="theNumberofSpots"></div>
@@ -53,36 +62,45 @@
         </div>
     </div><!-- end wrapper -->
 
+<script id="photogrid" type="text/html">
+  {{#rows}}
+    <div class=""><a href="{{imgurl}}" target="_blank"><img class="photo" src="{{imgurl}}"  alt="name"></a></div>
+  {{/rows}}
+</script>
+
     <script id="hackSpotsTable" type="text/html">
         <table>
-            <tr><th class="tHeader">Name</th><th class="tHeader">Address</th><th class="tHeader">City</th><th class="tHeader">State</th><th class="tHeader">Country</th><th class="">Elsewhere</th></tr>
+            <tr><th class="tHeader">Name</th><th class="tHeader">Vendor</th><th class="tHeader">Creator</th><th class="tHeader">Profile</th><th class="tHeader">Status</th><th class="">Visit</th></tr>
             {{#rows}}
-                <tr id="{{rowNumber}}" class="spotRow"><td>{{name}}</td><td>{{address}}</td><td>{{city}}</td><td>{{state}}</td><td>{{country}}</td><td><a class="button" href="https://maps.google.com/maps?q={{address}},{{city}},{{state}}" target="_blank">G Map</a> <a class="button" href="http://www.yelp.com/search?find_desc={{name}}&find_loc={{city}},{{state}}" target="_blank">Yelp</a></td></tr>
+                <tr id="{{rowNumber}}" class="spotRow"><td>{{name}}</td><td>{{vendor}}</td><td>{{creator}}</td><td>{{outlets}}</td><td>{{status}}</td><td><a class="button" href="{{located}}" target="_blank">Visit</a> </td></tr>
             {{/rows}}
         </table>
     </script>
 
     <script id="latestSpot" type="text/html">
         {{#rows}}
-            <h4 class="fauxButton">MOST RECENT SPOT</h4>
+            <h4 class="fauxButton">MOST RECENT BUY</h4>
             <h2>{{name}}</h2>
-            <p class="colorText">{{address}}<p>
-            <p class="colorText">{{city}}{{#state}}, {{state}}{{/state}}{{#postcode}}, {{postcode}}{{/postcode}}</p>
+            
             <ul>
+                <li><img src="{{imgurl}}" target="_blank"/></li>
+                <li>Status: <span class="colorText">{{outdoorseating}}</span></li>
                 <li><span class="category">Wifi:</span> {{located}}</li>
-                <li><span class="category">Outlets:</span> {{outlets}}</li>
-                <li><span class="category">Couch:</span> {{couch}}</li>
-                <li><span class="category">Large Table:</span> {{largetable}}</li>
-                <li><span class="category">Outdoor Seating:</span> {{outdoorseating}}</li>
-                <li><span class="category">Brewing:</span> {{brewing}}</li>
+                <li><span class="category">Profile:</span> {{outlets}}</li>
+                <li><span class="category">Child Deals:</span> {{couch}}</li>
+                <li><span class="category">Starting Price:</span> {{largetable}}</li>
+                <li><span class="category">Status:</span> {{outdoorseating}}</li>
+                <li><span class="category">Created By:</span> {{vendor}}</li>
                 <li><span class="category">Contributed By:</span> <a href="http://www.twitter.com/{{contributerstwitter}}" target="_blank">@{{contributerstwitter}}</a></li>
             </ul>
             <ul>
-                <li><a href="https://maps.google.com/maps?q={{address}},{{city}},{{state}}" target="_blank">View in Google Maps</a></li>
+                <li><a href="https://maps.google.com/maps?q={{vendor}},{{creator}},{{profile}}" target="_blank">View in Google Maps</a></li>
                 <li><a href="{{located}}" target="_blank">Find on Yelp</a></li>
             </ul>
         {{/rows}}
     </script>
+
+
 
     <script id="theNumberofSpots" type="text/html">
         <p><strong><span class="red-text">{{numberOfSpots}}</span> keysets running!</p>
@@ -90,20 +108,21 @@
 
     <script id="selectedSpot" type="text/html">
         {{#rows}}
-            <h4 class="fauxButton">SELECTED SPOT</h4>
+            <h4 class="fauxButton">SELECTED BUY</h4>
             <h2>{{name}}</h2>
-            <p class="colorText">{{address}}<p>
-            <p class="colorText">{{city}}{{#state}}, {{state}}{{/state}}{{#postcode}}, {{postcode}}{{/postcode}}</p>
+            
             <ul>
+                <li><img src="{{imgurl}}" target="_blank"/></li>
+                <li>Status: <span class="colorText">{{outdoorseating}}</span></li>
                 <li><span class="category">Wifi:</span> {{located}}</li>
-                <li><span class="category">Outlets:</span> {{outlets}}</li>
-                <li><span class="category">Couch:</span> {{couch}}</li>
-                <li><span class="category">Large Table:</span> {{largetable}}</li>
-                <li><span class="category">Outdoor Seating:</span> {{outdoorseating}}</li>
-                <li><span class="category">Brewing:</span> {{brewing}}</li>
+                <li><span class="category">Profile:</span> {{outlets}}</li>
+                <li><span class="category">Child Deals:</span> {{couch}}</li>
+                <li><span class="category">Starting Price:</span> {{largetable}}</li>
+                <li><span class="category">Status:</span> {{outdoorseating}}</li>
+                <li><span class="category">Created By:</span> {{creator}}</li>
             </ul>
             <ul>
-                <li><a href="https://maps.google.com/maps?q={{address}},{{city}},{{state}}" target="_blank">View in Google Maps</a></li>
+                <li><a href="https://maps.google.com/maps?q={{vendor}},{{creator}},{{profile}}" target="_blank">View in Google Maps</a></li>
                 <li><a href="{{located}}" target="_blank">Find on Yelp</a></li>
             </ul>
         {{/rows}}
@@ -130,7 +149,7 @@
 
             // create geoJSON with coordinates and other
             // useful bits from the original data
-            var optionsJSON = ["name", "address", "city", "rowNumber"]
+            var optionsJSON = ["name", "vendor", "creator", "rowNumber"]
             var geoJSON = Sheetsee.createGeoJSON(gData, optionsJSON)
 
             // create map, tilelayer (map background), markers and popups
@@ -173,7 +192,7 @@
                 var latestCompleteSpot = []
                 var startWithLatestRow = data.reverse()
                 startWithLatestRow.forEach(function(row){
-                    if (!row.lat || !row.long || !row.name || !row.address || !row.city || !row.state ) return
+                    if (!row.lat || !row.long || !row.name || !row.vendor || !row.creator || !row.profile ) return
                     else latestCompleteSpot.push(row)
                 })
                 return latestCompleteSpot[0]
@@ -219,6 +238,9 @@
                 $('.spotRow').first().click()
             }
         }
+
+            var html = Sheetsee.ich.photogrid({'rows': data})
+            $('#photogrid').html(html)
 
         $(document).on('keyup', '#tableFilter', function() {
             window.location.hash = $(this).val()

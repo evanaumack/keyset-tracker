@@ -1,9 +1,9 @@
 /* Page Specific CSS */
 
 body {font-family: Lato; background: #fff; color: #333; font-size: 16px; border: 52px #F8F8F8 solid; margin: 0px; padding: 20px 20px 200px 20px;}
-h1 {font-size: 90px; font-family: Amatic SC; font-weight: normal; margin: 0px;}
-h2 {font-size: 70px; font-family: Amatic SC; font-weight: normal; margin: 11px 0px;}
-h3 {font-family: Amatic SC; font-size: 40px; margin: 10px 0px;}
+h1 {font-size: 90px; font-family: Oswald; font-style: italic; font-weight: normal; margin: 0px;}
+h2 {font-size: 60px; font-family: Oswald; font-weight: normal; margin: 11px 0px;}
+h3 {font-family: Oswald; font-size: 40px; margin: 10px 0px;}
 h4 {font-family: Lato; font-size: 24px;}
 
 img {width: 50%;} 
@@ -49,6 +49,8 @@ ul.nav li a:hover {border-bottom: 1px #FD9393 solid;}
 #selectedSpot {display: none;}
 #latestSpot ul, #selectedSpot ul {list-style: none; margin-top: 12px 0px; padding: 0px;}
 .category {text-transform: uppercase; font-size: 9px; letter-spacing: .2em; padding-right: 6px;}
+.categorystatus {text-transform: uppercase; font-size: 13px; letter-spacing: .2em; padding-right: 6px;}
+.categorycolor {color: #FF4646; text-transform: uppercase; font-size: 13px; letter-spacing: .1em; padding-right: 6px; font-weight: 700;}
 
 #info p {font-size: 14px; padding: 4px; line-height: 19px; font-weight: 300;}
 #info {border-top: 4px #F8F8F8 solid;}

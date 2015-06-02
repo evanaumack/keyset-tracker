@@ -78,6 +78,24 @@
     <style>
         .photo {display: inline-block; float: left; width: 100px;}
         #photogrid {overflow: auto;}
+
+        .tooltipImageContainer {
+            position: relative;
+            width: 0px;
+            height: 0px;
+            top: -260px; /* this must be absolutely (math definition) equal or greater than the tooltip backdrop height (after it resizes to hold the image) */  
+        }
+
+        .tooltipImageBackdrop {
+            display: inline-block;
+            padding: 30px;
+            background-color: lightgray;
+        }
+
+        .tooltipImageContainer img:first-child {
+            width: auto;
+            height: 180px;
+        }
     </style>
 
 <body>
@@ -235,6 +253,32 @@
             // set it and pan to it
             $('#latestSpot').html(latestSpot)
             map.setView([theLatestSpot.lat, theLatestSpot.long], 14)
+
+
+            $('#hackSpotsTable').on('hover', '.spotRow', function(event) {
+                var targetRow = $(this).closest("tr")
+                var rowNumber = targetRow.attr("id")
+                
+                var dataElement = Sheetsee.getMatches(gData, rowNumber, "rowNumber")
+                var selectedSpot = Sheetsee.ich.selectedSpot({
+                    rows: dataElement
+                })
+
+                $(".tooltipImageContainer").remove()
+
+                var tooltip = $("<div class='tooltipImageContainer'>").html(selectedSpot)
+                var tooltipImage = tooltip.find("img:first").clone()
+                var tooltipImageBackdrop = $("<div class='tooltipImageBackdrop' />")
+
+                tooltipImageBackdrop.append(tooltipImage);
+                tooltip.empty().append(tooltipImageBackdrop)
+
+                targetRow.find("td:first").append(tooltip)
+            })
+
+            $('#hackSpotsTable').on('hover', '.tooltipImageContainer', function() {
+                $(".tooltipImageContainer").remove()
+            })
 
             // when someone clicks on a row, highlight it and
             // re-center the map
